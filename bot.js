@@ -33,7 +33,7 @@ var ApL = `${Math.round(client.ping)}`
   }
  });
 
- client.on('message', message => {S
+ client.on('message', message => {
 
  var ms = require('ms')
 
