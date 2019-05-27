@@ -1,188 +1,222 @@
-﻿const Discord = require("discord.js");
+const Discord = require("discord.js");
 const client = new Discord.Client();
-const prefix = "$";
+const prefix = "#";
 
 
-
+const Discord = require("discord.js");
+const client = new Discord.Client();
+const prefix =`#`
 client.on('ready', () => {
-   console.log(`----------------`);
-      console.log(`Desert Bot- Script By : EX Clan`);
-        console.log(`----------------`);
-      console.log(`ON ${client.guilds.size} Servers '     Script By : EX Clan ' `);
-    console.log(`----------------`);
-  console.log(`Logged in as ${client.user.tag}!`);
-client.user.setGame(`$bc |Misho Broadcast`,"http://twitch.tv/Death Shop")
-client.user.setStatus("dnd")
+      console.log(`Logged in as ${client.user.tag}!`);
 });
+client.on('message', message => {
+    if (message.author.bot) return;
+if (message.content.startsWith('مسح')) { //Codes
+    if(!message.channel.guild) return message.reply('⛔ | This Command For Servers Only!');
+        if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.channel.send('⛔ | You dont have **MANAGE_MESSAGES** Permission!');
+        if(!message.guild.member(client.user).hasPermission('MANAGE_MESSAGES')) return message.channel.send('⛔ | I dont have **MANAGE_MESSAGES** Permission!');
+ let args = message.content.split(" ").slice(1)
+    let messagecount = parseInt(args);
+    if (args > 99) return message.reply("**🛑 || يجب ان يكون عدد المسح أقل من 100 .**").then(messages => messages.delete(5000))
+    if(!messagecount) args = '100';
+    message.channel.fetchMessages({limit: messagecount + 1}).then(messages => message.channel.bulkDelete(messages));
+    message.channel.send(`\`${args}\` : __عدد الرسائل التي تم مسحها __ `).then(messages => messages.delete(5000));
+  }
+  });
 
 
 
-client.on("message", async message => {
-    var command = message.content.split(" ")[0];
-    command = command.slice(prefix.length);
-        if(!message.channel.guild) return;
-            var args = message.content.split(" ").slice(1).join(" ");
-            if(command == "bc") {
-                if(!message.member.hasPermission("ADMINISTRATOR")) {
-                    return message.channel.send("**للأسف لا تمتلك صلاحية `ADMINISTRATOR`**");
-                }
-                    if(!args) {
-                        return message.reply("**يجب عليك كتابة كلمة او جملة لإرسال البرودكاست**");
-                    }
-                        message.channel.send(`**هل أنت متأكد من إرسالك البرودكاست؟\nمحتوى البرودكاست: \`${args}\`**`).then(m => {
-                            m.react("✅")
-                            .then(() => m.react("❌"));
 
-                            let yesFilter = (reaction, user) => reaction.emoji.name == "✅" && user.id == message.author.id;
-                            let noFiler = (reaction, user) => reaction.emoji.name == "❌" && user.id == message.author.id;
+client.on('message' , message => {
+  if(message.author.bot) return;
+  if(message.content.startsWith(prefix + "ping")) {
+ message.channel.send('pong').then((msg) => {
+var PinG = `${Date.now() - msg.createdTimestamp}`
+var ApL = `${Math.round(client.ping)}`
+      msg.edit(`\`\`\`javascript\nTime taken: ${PinG} ms.\nDiscord API: ${ApL} ms.\`\`\``);
+ })
+  }
+ });
 
-                            let yes = m.createReactionCollector(yesFilter);
-                            let no = m.createReactionCollector(noFiler);
+ client.on('message', message => {S
 
-                            yes.on("collect", v => {
-                                m.delete();
-                                    message.channel.send(`:ballot_box_with_check: | Done ... The Broadcast Message Has Been Sent For ${message.guild.memberCount} Members`).then(msg => msg.delete(5000));
-                                        message.guild.members.forEach(member => {
-                                            let bc = new Discord.RichEmbed()
-                                            .setColor("RANDOM")
-                                            .setThumbnail(message.author.avatarURL)
-                                            .setTitle("Broadcast")
-                                            .addField("Server", message.guild.name)
-                                            .addField("Sender", message.author.username)
-                                            .addField("Message", args);
+ var ms = require('ms')
 
-                                            member.sendEmbed(bc);
-                                        });
-                        });
-                        no.on("collect", v => {
-                            m.delete();
-                            message.channel.send("**Broadcast Canceled.**").then(msg => msg.delete(3000));
-                        });
-                            
-                        });
-            }
-            if(command == "bco") {
-                if(!message.member.hasPermission("ADMINISTRATOR")) {
-                    return message.channel.send("**للأسف لا تمتلك صلاحية `ADMINISTRATOR`**");
-                }
-                    if(!args) {
-                        return message.reply("**يجب عليك كتابة كلمة او جملة لإرسال البرودكاست**");
-                    }
-                        message.channel.send(`**هل أنت متأكد من إرسالك البرودكاست؟\nمحتوى البرودكاست: \`${args}\`**`).then(m => {
-                            m.react("✅")
-                            .then(() => m.react("❌"));
+ var moment = require('moment');
 
-                            let yesFilter = (reaction, user) => reaction.emoji.name == "✅" && user.id == message.author.id;
-                            let noFiler = (reaction, user) => reaction.emoji.name == "❌" && user.id == message.author.id;
+ if (message.author.bot) return;
 
-                            let yes = m.createReactionCollector(yesFilter);
-                            let no = m.createReactionCollector(noFiler);
+ if (!message.content.startsWith(prefix)) return;
 
-                            yes.on("collect", v => {
-                                m.delete();
-                                    message.channel.send(`:ballot_box_with_check: | Done ... The Broadcast Message Has Been Sent For ${message.guild.members.filter(r => r.presence.status !== "offline").size} Members`).then(msg => msg.delete(5000));
-                                        message.guild.members.filter(r => r.presence.status !== "offline").forEach(member => {
-                                            let bco = new Discord.RichEmbed()
-                                            .setColor("RANDOM")
-                                            .setThumbnail(message.author.avatarURL)
-                                            .setTitle("Broadcast")
-                                            .addField("Server", message.guild.name)
-                                            .addField("Sender", message.author.username)
-                                            .addField("Message", args);
+ let command = message.content.split(" ")[0];
 
-                                            member.sendEmbed(bco);
-                                        });
-                        });
-                        no.on("collect", v => {
-                            m.delete();
-                            message.channel.send("**Broadcast Canceled.**").then(msg => msg.delete(3000));
-                        });
-                            
-                        });
-            }
+ command = command.slice(prefix.length);
+
+ let args = message.content.split(" ").slice(1);
+
+ let messageArray = message.content.split(" ");
+
+ let embed = new Discord.RichEmbed()
+
+.setImage("https://d.top4top.net/p_10880lo1r1.png")
+
+ if (command == "ban") {
+
+ if(!message.channel.guild) return message.reply('** This command only for servers**');
+
+ if(!message.guild.member(message.author).hasPermission("BAN_MEMBERS")) return message.reply("**:x: You Don't Have ` BAN_MEMBERS ` Permission**");
+
+ if(!message.guild.member(client.user).hasPermission("BAN_MEMBERS")) return message.reply("**:x: I Don't Have ` BAN_MEMBERS ` Permission**");
+
+ let user = message.mentions.users.first();
+
+ let Reason = message.content.split(" ").slice(3).join(" ");
+
+ let time = messageArray[2];
+
+ if (message.mentions.users.size < 1) return message.channel.sendEmbed(embed)
+
+ if (!message.guild.member(user).bannable) return message.reply("**:x:I Don't Have Permission For Ban This User**");
+
+ if(!time.match(/[1-60][s,m,h,d,w]/g))  return message.channel.send(':x: This Time Is Incorrect')
+
+ if(!Reason)  {
+
+ message.guild.member(user).ban({reason: Reason})
+
+ }
+
+  if(!Reason && time) {
+
+  message.guild.member(user).ban(7, user);
+
+  }
+
+  if(!time) {
+
+  message.guild.member(user).ban(7, user);
+
+  }
+  if(time) {
+
+  setTimeout(() => {
+
+  message.guild.unban(user);
+
+  }, ms(time));
+
+  }
+
+  if(time && Reason && user) {
+
+  message.guild.member(user).ban({reason: Reason})
+
+
+  setTimeout(() => {
+
+  message.guild.unban(user);
+
+  }, ms(time));
+
+  }
+
+  message.channel.send(`:white_check_mark:  ${user.tag} banned from the server ! :airplane:`)
+
+  }
+
+  });
+
+
+client.on('message', message => {
+
+  var ms = require('ms')
+
+  var moment = require('moment');
+
+
+  if (message.author.bot) return;
+
+  if (!message.content.startsWith(prefix)) return;
+
+  let command = message.content.split(" ")[0];
+
+  command = command.slice(prefix.length);
+
+  let args = message.content.split(" ").slice(1);
+
+  let messageArray = message.content.split(" ");
+
+  let muteRole = message.guild.roles.find("name", "Muted");
+
+  let embed = new Discord.RichEmbed()
+
+ .setImage("https://c.top4top.net/p_108825enp1.png")
+
+  if (command == "mute") {
+
+  if(!muteRole) return message.guild.createRole({ name: "Muted", permissions: [] });
+
+  if(!message.channel.guild) return message.reply('** This command only for servers**');
+
+  if(!message.guild.member(message.author).hasPermission("MUTE_MEMBERS")) return message.reply("**:x: You Don't Have ` MUTE_MEMBERS ` Permission**");
+
+  if(!message.guild.member(client.user).hasPermission("MUTE_MEMBERS")) return message.reply("**:x: I Don't Have ` MUTE_MEMBERS ` Permission**");
+
+  let user = message.mentions.users.first();
+
+  let Reason = message.content.split(" ").slice(4).join(" ");
+
+  let time = messageArray[2];
+
+  if (message.mentions.users.size < 1) return message.channel.sendEmbed(embed)
+
+  if (!message.guild.member(user).bannable) return message.reply("**:x:I Don't Have Permission For Mute This User**");
+
+  if(!Reason)  {
+
+    message.guild.member(user).addRole(muteRole);
+
+  }
+
+   if(!Reason && time) {
+
+    message.guild.member(user).addRole(muteRole);
+
+   }
+
+   if(!time) {
+
+    message.guild.member(user).addRole(muteRole);
+
+   }
+   if(time) {
+    if(!time.match(/[1-60][s,m,h,d,w]/g))  return message.channel.send(':x: This Time Is Incorrect')
+
+   setTimeout(() => {
+
+    message.guild.member(user).removeRole(muteRole);
+
+   }, ms(time));
+
+   }
+
+   if(time && Reason && user) {
+
+    message.guild.member(user).addRole(muteRole);
+
+
+   setTimeout(() => {
+
+    message.guild.member(user).removeRole(muteRole);
+
+   }, ms(time));
+
+   }
+
+   message.channel.send(`:white_check_mark: ${user} has been muted ! :zipper_mouth:`)
+
+   }
+
 });
-
-
-
-client.on("message", async message => {
-    if(message.content == prefix + "server") {
-        if(!message.channel.guild) return;
-            if(!message.member.hasPermission("MANAGE_GUILD")) {
-                return message.channel.send("ليس لديك الصلآحية الكآفية . :broken_heart:");
-            }
-
-                let server = new Discord.RichEmbed()
-                    .setAuthor(message.guild.name)
-                    .setColor("RANDOM")
-                    .setTitle("Server Info :hearts: :sparkles:")
-                    .setDescription(`Members :bust_in_silhouette: : ${message.guild.memberCount}\nOwner :crown: : ${message.guild.owner.user.username}\nServer ID :id: : ${message.guild.id}\nRoles :lock: : ${message.guild.roles.size}\nRegion :earth_africa: : ${message.guild.region.toUpperCase()}`);
-
-                    message.channel.sendEmbed(server);
-
-    }
-});
-client.on("message", async message => {
-    if(message.content.startsWith(prefix + "banned")) {
-        if(!message.guild) return;
-        message.guild.fetchBans()
-        .then(bans => {
-            let b = bans.size;
-            let bb = bans.map(a => `${a}`).join(" - ");
-            message.channel.send(`**\`${b}\` | ${bb}**`);
-        });
-    }
-});
-client.on("message", async message => {
-    if(message.content.startsWith(prefix + "invite")) {
-        let invite = new Discord.RichEmbed()
-            .setColor("RANDOM")
-            .setAuthor(message.author.username, message.author.displayAvatarURL)
-            .setThumbnail(message.author.avatarURL)
-            .setTitle("**Click Here To Invite The Bot To Your Server :sparkling_heart:**")
-            .setURL(`https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8`);
-            message.channel.sendEmbed(invite);
-    }
-});
-client.on("message", async message => {
-    if(message.content.startsWith(prefix + "help")) {
-        let help = new Discord.RichEmbed()
-            .setColor("RANDOM")
-            .setThumbnail(message.author.avatarURL)
-            .setDescription(`**__برودكاست بوت | Version 1.1__ 
-
-            برودكاست عادي : ${prefix}bc
-            دعوة البوت لسيرفرك : ${prefix}invite
-            معلومات عن السيرفر : ${prefix}server
-            برودكاست للأونلاين فقط : ${prefix}bco
-            يعرض لك عدد المتبندين من سيرفرك : ${prefix}banned
-            رابط سيرفر الدعم الفني : https://discord.gg/YEXcDXt 
-            **`);
-            message.channel.sendEmbed(help); // رابط السيرفر يعود الى سيرفر CODES .
-    }
-});
-
-
-client.on("message", message => { //clear
-              var args = message.content.substring(prefix.length).split(" ");
-              if (message.content.startsWith(prefix + "clear")) {
-                  if(!message.channel.guild) return message.reply('**? اسف لكن هذا الامر للسيرفرات فقط **');         
-     if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.reply('**?  لا يوجد لديك صلاحية لمسح الشات**');
-          var msg;
-          msg = parseInt();
-        
-        message.channel.fetchMessages({limit: msg}).then(messages => message.channel.bulkDelete(messages)).catch(console.error);
-        message.channel.sendMessage("", {embed: {
-          title: "``تــم مسح الشات ``",
-          color: 0x5016f3, 
-          footer: {
-            
-          }
-        }}).then(msg => {msg.delete(3000)});
-                            }
-  
-       
-});
-
-
 
 client.login(process.env.BOT_TOKEN);
